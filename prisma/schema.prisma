@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserStatus {
+  CREATED
+  ACTIVED
+  INACTIVED
+}
+
+model User {
+  id       String     @id() @default(uuid())
+  email    String     @unique()
+  name     String
+  password String
+  status   UserStatus
+}
+
+model Question {
+  id            String                     @id() @default(uuid())
+  enunciation   String
+  examTemplates QuestionsOnExamTemplates[]
+}
+
+model QuestionsOnExamTemplates {
+  examTemplate   ExamTemplate @relation(fields: [examTemplateId], references: [id])
+  question       Question     @relation(fields: [questionId], references: [id])
+  examTemplateId String
+  questionId     String
+
+  @@id([examTemplateId, questionId])
+}
+
+model ExamTemplate {
+  id          String                     @id() @default(uuid())
+  title       String
+  description String
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime?
+  questions   QuestionsOnExamTemplates[]
+}
