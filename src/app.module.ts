@@ -3,6 +3,7 @@ import { HttpModule } from './http/http.module';
 import { EnvModule } from './env/env.module';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './env/env';
+import { SecurityModule } from './security/security.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { envSchema } from './env/env';
       validate: (env) => envSchema.parse(env),
       isGlobal: true,
     }),
+    SecurityModule,
     HttpModule,
     EnvModule,
   ],

@@ -31,7 +31,7 @@ export class AuthenticateWithEmailController {
 
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(authenticateWithEmailBodySchema))
-  @Post('/authenticate-with-email')
+  @Post('/authenticate/with-email')
   async handle(@Body() body: AuthenticateWithEmailBodySchema) {
     const { email, password } = body;
 

@@ -4,11 +4,21 @@ import { RegisterController } from './controllers/register.controller';
 import { AuthenticateWithEmailController } from './controllers/authenticate-with-email.controller';
 import { RegisterUseCase } from 'src/use-cases/register.use-case';
 import { AuthenticateWithEmailUseCase } from 'src/use-cases/authenticate-with-email.use-case';
+import { CreateQuestionController } from './controllers/create-question.controller';
+import { CreateQuestionUseCase } from 'src/use-cases/create-question.use-case';
 import { SecurityModule } from 'src/security/security.module';
 
 @Module({
   imports: [DatabaseModule, SecurityModule],
-  controllers: [RegisterController, AuthenticateWithEmailController],
-  providers: [RegisterUseCase, AuthenticateWithEmailUseCase],
+  controllers: [
+    RegisterController,
+    AuthenticateWithEmailController,
+    CreateQuestionController,
+  ],
+  providers: [
+    RegisterUseCase,
+    AuthenticateWithEmailUseCase,
+    CreateQuestionUseCase,
+  ],
 })
 export class HttpModule {}

@@ -11,7 +11,7 @@ export interface QuestionProps {
 
 export class Question extends Entity<QuestionProps> {
   get authorId() {
-    return this.authorId;
+    return this.props.authorId;
   }
 
   set authorId(authorId: UniqueEntityID) {
@@ -19,7 +19,7 @@ export class Question extends Entity<QuestionProps> {
   }
 
   get statement() {
-    return this.statement;
+    return this.props.statement;
   }
 
   set statement(statement: string) {
@@ -27,7 +27,7 @@ export class Question extends Entity<QuestionProps> {
   }
 
   get alternatives() {
-    return this.alternatives;
+    return this.props.alternatives;
   }
 
   set alternatives(alternatives: QuestionAlternativeList) {

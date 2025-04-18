@@ -8,6 +8,30 @@ interface QuestionAlternativeProps {
 }
 
 export class QuestionAlternative extends Entity<QuestionAlternativeProps> {
+  get questionId() {
+    return this.props.questionId;
+  }
+
+  set questionId(questionId: UniqueEntityID) {
+    this.props.questionId = questionId;
+  }
+
+  get text() {
+    return this.props.text;
+  }
+
+  set text(text: string) {
+    this.props.text = text;
+  }
+
+  get isCorrect() {
+    return this.props.isCorrect;
+  }
+
+  set isCorrect(isCorrect: boolean) {
+    this.props.isCorrect = isCorrect;
+  }
+
   static create(props: QuestionAlternativeProps, id?: UniqueEntityID) {
     const questionAlternative = new QuestionAlternative(
       {

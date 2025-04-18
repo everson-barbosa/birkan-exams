@@ -45,7 +45,7 @@ export class AuthenticateWithEmailUseCase {
     }
 
     const accessToken = await this.encrypter.encrypt({
-      sub: userOnDatabase.id,
+      sub: userOnDatabase.id.toString(),
     });
 
     return right({ accessToken });

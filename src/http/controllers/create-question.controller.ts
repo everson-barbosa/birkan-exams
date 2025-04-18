@@ -14,7 +14,6 @@ import { CurrentUser } from 'src/security/auth/current-user.decorator';
 import { UserPayload } from 'src/security/auth/jwt.strategy';
 
 const createQuestionBodySchema = z.object({
-  authorId: z.string(),
   statement: z.string(),
   alternatives: z.array(
     z.object({
@@ -31,7 +30,6 @@ export class CreateQuestionController {
   constructor(private createQuestionUseCase: CreateQuestionUseCase) {}
 
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createQuestionBodySchema))
   @Post('/questions/create')
   async handle(
     @Body() body: CreateQuestionBodySchema,
