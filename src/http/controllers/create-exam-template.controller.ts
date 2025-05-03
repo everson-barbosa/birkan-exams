@@ -4,17 +4,18 @@ import {
   Controller,
   HttpCode,
   Post,
-  UsePipes,
 } from '@nestjs/common';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import { z } from 'zod';
 import { CurrentUser } from 'src/security/auth/current-user.decorator';
 import { UserPayload } from 'src/security/auth/jwt.strategy';
 import { CreateExamTemplateUseCase } from 'src/use-cases/create-exam-template.use-case';
+import { ExamTemplatePresenter } from '../presenters/exam-template.presenter';
 
 const createExamTemplateBodySchema = z.object({
   title: z.string(),
   description: z.string(),
+  isPublished: z.boolean(),
   questions: z.array(
     z.object({
       questionId: z.string(),
@@ -27,23 +28,25 @@ type CreateExamTemplateBodySchema = z.infer<
   typeof createExamTemplateBodySchema
 >;
 
-@Controller()
+const bodyValidationPipe = new ZodValidationPipe(createExamTemplateBodySchema);
+
+@Controller('exam-templates')
 export class CreateExamTemplateController {
   constructor(private createExamTemplateUseCase: CreateExamTemplateUseCase) {}
 
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createExamTemplateBodySchema))
   @Post()
   async handle(
-    @Body() body: CreateExamTemplateBodySchema,
+    @Body(bodyValidationPipe) body: CreateExamTemplateBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { title, description, questions } = body;
+    const { title, description, isPublished, questions } = body;
 
     const result = await this.createExamTemplateUseCase.execute({
       authorId: user.sub,
       title,
       description,
+      isPublished,
       questions,
     });
 
@@ -51,6 +54,6 @@ export class CreateExamTemplateController {
       return new BadRequestException();
     }
 
-    return result.value.examTemplate;
+    return ExamTemplatePresenter.toHttp(result.value.examTemplate);
   }
 }

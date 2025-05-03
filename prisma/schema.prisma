@@ -25,14 +25,15 @@ model User {
   name     String
   password String
 
-  status    UserStatus
-  questions Question[]
+  status       UserStatus
+  questions    Question[]
+  ExamTemplate ExamTemplate[]
 }
 
 model Question {
   id        String @id() @default(uuid())
-  statement String
   authorId  String
+  statement String
 
   author        User                      @relation(fields: [authorId], references: [id])
   examTemplates QuestionsOnExamTemplate[]
@@ -57,11 +58,21 @@ model QuestionsOnExamTemplate {
   @@id([examTemplateId, questionId])
 }
 
+enum ExamTemplateStatus {
+  SKETCH
+  PUBLISHED
+  CANCELED
+}
+
 model ExamTemplate {
-  id          String                    @id() @default(uuid())
+  id          String             @id() @default(uuid())
+  authorId    String
   title       String
   description String
-  createdAt   DateTime                  @default(now())
+  status      ExamTemplateStatus
+  createdAt   DateTime           @default(now())
   updatedAt   DateTime?
-  questions   QuestionsOnExamTemplate[]
+
+  author    User                      @relation(fields: [authorId], references: [id])
+  questions QuestionsOnExamTemplate[]
 }

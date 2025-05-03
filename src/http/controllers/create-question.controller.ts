@@ -4,7 +4,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  UsePipes,
 } from '@nestjs/common';
 import { CreateQuestionUseCase } from 'src/use-cases/create-question.use-case';
 import { z } from 'zod';
@@ -25,15 +24,18 @@ const createQuestionBodySchema = z.object({
 
 type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>;
 
+const bodyValidationPipe = new ZodValidationPipe(createQuestionBodySchema);
+
 @Controller()
 export class CreateQuestionController {
   constructor(private createQuestionUseCase: CreateQuestionUseCase) {}
 
   @HttpCode(201)
-  @Post('/questions/create')
+  @Post('/questions')
   async handle(
-    @Body() body: CreateQuestionBodySchema,
-    @CurrentUser() user: UserPayload,
+    @Body(bodyValidationPipe) body: CreateQuestionBodySchema,
+    @CurrentUser()
+    user: UserPayload,
   ) {
     const { statement, alternatives } = body;
 

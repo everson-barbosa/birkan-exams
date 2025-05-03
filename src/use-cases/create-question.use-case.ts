@@ -6,10 +6,15 @@ import { QuestionAlternative } from 'src/entities/question-alternative.entity';
 import { QuestionAlternativeList } from 'src/entities/question-alternative.list';
 import { Question } from 'src/entities/question.entity';
 
+interface Alternative {
+  text: string;
+  isCorrect: boolean;
+}
+
 interface CreateQuestionUseCaseRequest {
   authorId: string;
   statement: string;
-  alternatives: Array<{ text: string; isCorrect: boolean }>;
+  alternatives: Alternative[];
 }
 
 type CreateQuestionUseCaseResponse = Either<null, { question: Question }>;

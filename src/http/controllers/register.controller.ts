@@ -5,7 +5,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  UsePipes,
 } from '@nestjs/common';
 import { RegisterUseCase } from 'src/use-cases/register.use-case';
 import { z } from 'zod';
@@ -22,15 +21,16 @@ const registerBodySchema = z.object({
 
 type RegisterBodySchema = z.infer<typeof registerBodySchema>;
 
+const bodyValidationPipe = new ZodValidationPipe(registerBodySchema);
+
 @Controller()
 @Public()
 export class RegisterController {
   constructor(private registerUseCase: RegisterUseCase) {}
 
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(registerBodySchema))
   @Post('/register')
-  async handle(@Body() body: RegisterBodySchema) {
+  async handle(@Body(bodyValidationPipe) body: RegisterBodySchema) {
     const result = await this.registerUseCase.execute(body);
 
     if (result.isLeft()) {
