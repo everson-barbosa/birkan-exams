@@ -13,14 +13,12 @@ import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import { Public } from 'src/security/auth/public';
 import { WrongCredentialsError } from 'src/use-cases/errors/wrong-credentails.error';
 
-const authenticateWithEmailBodySchema = z.object({
+const bodySchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-type AuthenticateWithEmailBodySchema = z.infer<
-  typeof authenticateWithEmailBodySchema
->;
+type BodySchema = z.infer<typeof bodySchema>;
 
 @Controller()
 @Public()
@@ -30,9 +28,9 @@ export class AuthenticateWithEmailController {
   ) {}
 
   @HttpCode(200)
-  @UsePipes(new ZodValidationPipe(authenticateWithEmailBodySchema))
+  @UsePipes(new ZodValidationPipe(bodySchema))
   @Post('/authenticate/with-email')
-  async handle(@Body() body: AuthenticateWithEmailBodySchema) {
+  async handle(@Body() body: BodySchema) {
     const { email, password } = body;
 
     const result = await this.authenticateWithEmailUseCase.execute({

@@ -5,20 +5,16 @@ import { GetExamTemplatesCountByStatusAndAuthorUseCase } from 'src/use-cases/get
 import { z } from 'zod';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
-const getCountExamTemplatesByStatusAndAuthorParamSchema = z.object({
+const paramSchema = z.object({
   status: z.coerce
     .string()
     .transform((val) => val.toUpperCase())
     .pipe(z.enum(['SKETCH', 'PUBLISHED', 'CANCELED'])),
 });
 
-type GetCountExamTemplatesByStatusAndAuthorParamSchema = z.infer<
-  typeof getCountExamTemplatesByStatusAndAuthorParamSchema
->;
+type ParamSchema = z.infer<typeof paramSchema>;
 
-const paramValidationPipe = new ZodValidationPipe(
-  getCountExamTemplatesByStatusAndAuthorParamSchema,
-);
+const paramValidationPipe = new ZodValidationPipe(paramSchema);
 
 @Controller('exam-templates')
 export class GetCountExamTemplatesByStatusAndAuthorController {
@@ -29,7 +25,7 @@ export class GetCountExamTemplatesByStatusAndAuthorController {
   @Get('count/:status')
   async handle(
     @Param(paramValidationPipe)
-    params: GetCountExamTemplatesByStatusAndAuthorParamSchema,
+    params: ParamSchema,
     @CurrentUser() user: UserPayload,
   ) {
     const { status } = params;

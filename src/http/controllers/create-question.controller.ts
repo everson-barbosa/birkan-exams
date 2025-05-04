@@ -12,7 +12,7 @@ import { QuestionPresenter } from '../presenters/question.presenter';
 import { CurrentUser } from 'src/security/auth/current-user.decorator';
 import { UserPayload } from 'src/security/auth/jwt.strategy';
 
-const createQuestionBodySchema = z.object({
+const bodySchema = z.object({
   statement: z.string(),
   alternatives: z.array(
     z.object({
@@ -22,9 +22,9 @@ const createQuestionBodySchema = z.object({
   ),
 });
 
-type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>;
+type BodySchema = z.infer<typeof bodySchema>;
 
-const bodyValidationPipe = new ZodValidationPipe(createQuestionBodySchema);
+const bodyValidationPipe = new ZodValidationPipe(bodySchema);
 
 @Controller()
 export class CreateQuestionController {
@@ -33,7 +33,7 @@ export class CreateQuestionController {
   @HttpCode(201)
   @Post('/questions')
   async handle(
-    @Body(bodyValidationPipe) body: CreateQuestionBodySchema,
+    @Body(bodyValidationPipe) body: BodySchema,
     @CurrentUser()
     user: UserPayload,
   ) {

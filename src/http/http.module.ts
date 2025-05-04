@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
-import { RegisterController } from './controllers/register.controller';
+import { RegisterAccountController } from './controllers/register-account.controller';
 import { AuthenticateWithEmailController } from './controllers/authenticate-with-email.controller';
-import { RegisterUseCase } from 'src/use-cases/register.use-case';
+import { RegisterAccountUseCase } from 'src/use-cases/register-account.use-case';
 import { AuthenticateWithEmailUseCase } from 'src/use-cases/authenticate-with-email.use-case';
 import { CreateQuestionController } from './controllers/create-question.controller';
 import { CreateQuestionUseCase } from 'src/use-cases/create-question.use-case';
@@ -17,7 +17,7 @@ import { GetExamTemplatesCountByStatusAndAuthorUseCase } from 'src/use-cases/get
 @Module({
   imports: [DatabaseModule, SecurityModule],
   controllers: [
-    RegisterController,
+    RegisterAccountController,
     AuthenticateWithEmailController,
     CreateQuestionController,
     CreateExamTemplateController,
@@ -25,7 +25,7 @@ import { GetExamTemplatesCountByStatusAndAuthorUseCase } from 'src/use-cases/get
     GetCountExamTemplatesByStatusAndAuthorController,
   ],
   providers: [
-    RegisterUseCase,
+    RegisterAccountUseCase,
     AuthenticateWithEmailUseCase,
     CreateQuestionUseCase,
     CreateExamTemplateUseCase,

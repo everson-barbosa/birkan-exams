@@ -12,7 +12,7 @@ import { UserPayload } from 'src/security/auth/jwt.strategy';
 import { CreateExamTemplateUseCase } from 'src/use-cases/create-exam-template.use-case';
 import { ExamTemplatePresenter } from '../presenters/exam-template.presenter';
 
-const createExamTemplateBodySchema = z.object({
+const bodySchema = z.object({
   title: z.string(),
   description: z.string(),
   isPublished: z.boolean(),
@@ -24,11 +24,9 @@ const createExamTemplateBodySchema = z.object({
   ),
 });
 
-type CreateExamTemplateBodySchema = z.infer<
-  typeof createExamTemplateBodySchema
->;
+type BodySchema = z.infer<typeof bodySchema>;
 
-const bodyValidationPipe = new ZodValidationPipe(createExamTemplateBodySchema);
+const bodyValidationPipe = new ZodValidationPipe(bodySchema);
 
 @Controller('exam-templates')
 export class CreateExamTemplateController {
@@ -37,7 +35,7 @@ export class CreateExamTemplateController {
   @HttpCode(201)
   @Post()
   async handle(
-    @Body(bodyValidationPipe) body: CreateExamTemplateBodySchema,
+    @Body(bodyValidationPipe) body: BodySchema,
     @CurrentUser() user: UserPayload,
   ) {
     const { title, description, isPublished, questions } = body;

@@ -19,6 +19,22 @@ enum UserStatus {
   INACTIVED
 }
 
+enum OutboxStatus {
+  PENDING
+  PROCESSED
+}
+
+model OutBoxEvent {
+  id          String       @id @default(uuid())
+  event       String
+  payload     String
+  createdAt   DateTime     @default(now())
+  processedAt DateTime?
+  status      OutboxStatus @default(PENDING)
+
+  @@index([processedAt])
+}
+
 model User {
   id       String @id() @default(uuid())
   email    String @unique()

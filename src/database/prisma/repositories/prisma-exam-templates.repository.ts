@@ -6,6 +6,7 @@ import {
 } from 'src/entities/exam-template.entity';
 import { PrismaExamTemplateMapper } from '../mappers/prisma-exam-template.mapper';
 import { PrismaService } from '../prisma.service';
+import { ExamTemplateCreatedSerializer } from 'src/database/prisma/serializers/exam-template-created.serializer';
 
 @Injectable()
 export class PrismaExamTemplatesRepository implements ExamTemplatesRepository {
@@ -14,8 +15,17 @@ export class PrismaExamTemplatesRepository implements ExamTemplatesRepository {
   async create(examTemplate: ExamTemplate): Promise<void> {
     const data = PrismaExamTemplateMapper.toPrisma(examTemplate);
 
-    await this.prismaService.examTemplate.create({
-      data,
+    await this.prismaService.$transaction(async (transaction) => {
+      await transaction.examTemplate.create({
+        data,
+      });
+
+      await transaction.outBoxEvent.create({
+        data: {
+          event: 'examTemplate.created',
+          payload: ExamTemplateCreatedSerializer.serialize(examTemplate),
+        },
+      });
     });
   }
 

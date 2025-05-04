@@ -4,6 +4,7 @@ import { EnvModule } from './env/env.module';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './env/env';
 import { SecurityModule } from './security/security.module';
+import { EventModule } from './events/event.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SecurityModule } from './security/security.module';
     SecurityModule,
     HttpModule,
     EnvModule,
+    EventModule,
   ],
 })
 export class AppModule {}

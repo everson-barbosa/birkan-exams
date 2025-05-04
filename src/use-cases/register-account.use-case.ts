@@ -5,13 +5,13 @@ import { UsersRepository } from 'src/database/repositories/users.repository';
 import { UserStatus, User } from 'src/entities/user.entity';
 import { EmailAlreadyRegisteredError } from './errors/email-already-registered.error';
 
-interface RegisterUseCaseRequest {
+interface RegisterAccountUseCaseRequest {
   readonly name: string;
   readonly email: string;
   readonly password: string;
 }
 
-type RegisterUseCaseResponse = Either<
+type RegisterAccountUseCaseResponse = Either<
   EmailAlreadyRegisteredError,
   {
     readonly user: User;
@@ -19,7 +19,7 @@ type RegisterUseCaseResponse = Either<
 >;
 
 @Injectable()
-export class RegisterUseCase {
+export class RegisterAccountUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private hashGenerator: HashGenerator,
@@ -29,7 +29,7 @@ export class RegisterUseCase {
     email,
     name,
     password,
-  }: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
+  }: RegisterAccountUseCaseRequest): Promise<RegisterAccountUseCaseResponse> {
     const userOnDatabase = await this.usersRepository.findByEmail(email);
 
     if (userOnDatabase) {

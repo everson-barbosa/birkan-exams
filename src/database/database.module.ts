@@ -23,6 +23,11 @@ import { PrismaExamTemplatesRepository } from './prisma/repositories/prisma-exam
       useClass: PrismaExamTemplatesRepository,
     },
   ],
-  exports: [UsersRepository, QuestionsRepository, ExamTemplatesRepository],
+  exports: [
+    UsersRepository,
+    QuestionsRepository,
+    ExamTemplatesRepository,
+    PrismaService,
+  ],
 })
 export class DatabaseModule {}
