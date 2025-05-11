@@ -4,11 +4,10 @@ import { BcryptHasher } from './bcrypt/bcrypt-hasher';
 import { HashGenerator } from './hash-generator';
 import { Encrypter } from './encrypter';
 import { JwtEncrypter } from './jwt/jwt-encrypter';
-import { EnvModule } from 'src/env/env.module';
 import { JwtConfigModule } from 'src/security/jwt/jwt-config.module';
 
 @Module({
-  imports: [JwtConfigModule, EnvModule],
+  imports: [JwtConfigModule],
   providers: [
     {
       provide: HashComparer,

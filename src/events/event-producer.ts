@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-interface EmitProps {
-  readonly event: string;
-  readonly payload: unknown;
+export interface EmitProps {
+  readonly topic: string;
+  readonly payload: string;
 }
 
 @Injectable()
 export abstract class EventProducer {
-  abstract emit(props: EmitProps): Promise<void>;
+  abstract produce(props: EmitProps): Promise<void>;
 }

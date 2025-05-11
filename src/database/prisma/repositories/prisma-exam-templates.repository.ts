@@ -22,7 +22,7 @@ export class PrismaExamTemplatesRepository implements ExamTemplatesRepository {
 
       await transaction.outBoxEvent.create({
         data: {
-          event: 'examTemplate.created',
+          topic: 'exams.exam-template.created.v1',
           payload: ExamTemplateCreatedSerializer.serialize(examTemplate),
         },
       });

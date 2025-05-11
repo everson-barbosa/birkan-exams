@@ -6,6 +6,8 @@ import { QuestionsRepository } from './repositories/questions.repository';
 import { PrismaQuestionsRepository } from './prisma/repositories/prisma-questions.repository';
 import { ExamTemplatesRepository } from './repositories/exam-templates.repository';
 import { PrismaExamTemplatesRepository } from './prisma/repositories/prisma-exam-templates.repository';
+import { OutBoxEventsRepository } from './repositories/out-box-events.repository';
+import { PrismaOutBoxEventsRepository } from './prisma/repositories/prisma-out-box-events.repository';
 
 @Module({
   providers: [
@@ -22,11 +24,16 @@ import { PrismaExamTemplatesRepository } from './prisma/repositories/prisma-exam
       provide: ExamTemplatesRepository,
       useClass: PrismaExamTemplatesRepository,
     },
+    {
+      provide: OutBoxEventsRepository,
+      useClass: PrismaOutBoxEventsRepository,
+    },
   ],
   exports: [
     UsersRepository,
     QuestionsRepository,
     ExamTemplatesRepository,
+    OutBoxEventsRepository,
     PrismaService,
   ],
 })
