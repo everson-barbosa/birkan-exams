@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { HttpModule } from './http/http.module';
-import { EnvModule } from './env/env.module';
 import { ConfigModule } from '@nestjs/config';
-import { envSchema } from './env/env';
-import { EventModule } from './events/event.module';
+import { envSchema } from './infra/env/env';
+import { EnvModule } from './infra/env/env.module';
+import { HttpModule } from './infra/http/http.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { EventModule } from './events/event.module';
     }),
     HttpModule,
     EnvModule,
-    EventModule,
   ],
 })
 export class AppModule {}
