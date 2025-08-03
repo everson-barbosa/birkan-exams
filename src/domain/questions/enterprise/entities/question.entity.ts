@@ -15,4 +15,10 @@ export class Question<
   get enunciation() {
     return this.props.enunciation;
   }
+
+  static create(props: QuestionProps, id?: UniqueEntityID) {
+    const question = new Question({ ...props }, id);
+
+    return question;
+  }
 }

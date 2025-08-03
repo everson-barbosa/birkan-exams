@@ -2,6 +2,8 @@ import { MultipleChoiceQuestionAlternative } from '../../enterprise/entities/mul
 import { MultipleChoiceQuestionAlternativeList } from '../../../exam-templates/enterprise/entities/multiple-choice-question-alternative.list';
 import { MultipleChoiceQuestion } from '../../../exam-templates/enterprise/entities/multiple-choice-question.entity';
 import { MultipleChoiceQuestionsRepository } from '../repositories/multiple-choice-questions.repository';
+import { Either, left, right } from 'src/core/either';
+import { EmptyQuestionAlternativesError } from './errors/empty-question-alternatives.error';
 
 interface CreateMultipleChoiceQuestionUseCaseRequest {
   readonly enunciation: string;
@@ -11,6 +13,13 @@ interface CreateMultipleChoiceQuestionUseCaseRequest {
   }>;
 }
 
+type CreateMultipleChoiceQuestionUseCaseResponse = Either<
+  EmptyQuestionAlternativesError,
+  {
+    multipleChoiceQuestion: MultipleChoiceQuestion;
+  }
+>;
+
 export class CreateMultipleChoiceQuestionUseCase {
   constructor(
     private multipleChoiceQuestionsRepository: MultipleChoiceQuestionsRepository,
@@ -19,7 +28,13 @@ export class CreateMultipleChoiceQuestionUseCase {
   async execute({
     enunciation,
     alternatives,
-  }: CreateMultipleChoiceQuestionUseCaseRequest) {
+  }: CreateMultipleChoiceQuestionUseCaseRequest): Promise<CreateMultipleChoiceQuestionUseCaseResponse> {
+    const isEmptyAlternatives = alternatives.length === 0;
+
+    if (isEmptyAlternatives) {
+      return left(new EmptyQuestionAlternativesError());
+    }
+
     const multipleChoiceQuestion = MultipleChoiceQuestion.create({
       enunciation,
     });
@@ -39,6 +54,6 @@ export class CreateMultipleChoiceQuestionUseCase {
 
     await this.multipleChoiceQuestionsRepository.create(multipleChoiceQuestion);
 
-    return multipleChoiceQuestion;
+    return right({ multipleChoiceQuestion });
   }
 }
